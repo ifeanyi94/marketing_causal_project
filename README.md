@@ -1,5 +1,5 @@
 Title:
-“Causal Impact of Marketing Campaigns Using Bayesian Inference with Python ML models, R, and AWS”
+“Causal Impact of Marketing Campaigns Using Bayesian Inference with Python ML models, R, and AWS”.
 
 # 1. Project Overview
 
