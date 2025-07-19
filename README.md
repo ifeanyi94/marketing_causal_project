@@ -3,7 +3,7 @@
 
 # 1. Project Overview
 
-This project estimates the **causal impact of marketing campaigns** using an integrated **R + Python ML pipeline** deployed via **AWS**.
+This project estimates the **causal impact of marketing campaigns** using an integrated **R + Python ML pipeline** deployed via **AWS**
 
 ### Objectives:
 
