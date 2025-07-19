@@ -1,9 +1,9 @@
-Title:
-“Causal Impact of Marketing Campaigns Using Bayesian Inference with Python ML models, R, and AWS”.
+# Marketing Causal Project
+
 
 # 1. Project Overview
 
-This project estimates the **causal impact of marketing campaigns** using an integrated **R + Python pipeline** deployed via **AWS**.
+This project estimates the **causal impact of marketing campaigns** using an integrated **R + Python ML pipeline** deployed via **AWS**.
 
 ### Objectives:
 
