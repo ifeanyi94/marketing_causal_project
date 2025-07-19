@@ -1,0 +1,38 @@
+Summary of Bayesian Regression Results
+Model type: Bayesian linear regression (brms)
+
+Formula:
+Spend = Intercept + Campaign Effect + Random Noise
+
+Key Findings:
+Term	Estimate	    95% Credible Interval	    Interpretation
+Intercept (baseline)	144.34	137.65 to 151.08	Average spend without campaign
+Campaign Effect	+84.32	75.02 to 93.49	            Increase in spend when campaign is received
+
+Sigma (noise / unexplained variance): 92.49 (credible interval: 87.58 to 97.84)
+
+This reflects natural variability in spend not explained by the campaign.
+
+Diagnostics:
+Metric	Result	Interpretation
+Rhat	1.00	✅ Good convergence (no chain issues)
+Effective Samples (ESS)	High (3600–4600)	✅ Reliable estimation
+
+Plain English Summary:
+Running the campaign increased average customer spend by about 84 units (±5).
+Without the campaign, the average spend was around 144 units.
+The model converged well, and the results are statistically credible.
+
+Why This Matters:
+The campaign had a strong positive effect on customer spend.
+
+Bayesian modeling provides uncertainty ranges, not just point estimates—giving you a full picture of possible outcomes.
+
+These results can guide future marketing budgets and decisions.
+
+Final results summary
+| **Analysis**                      | **Metric**                        | **Result**                                        |
+| --------------------------------- | --------------------------------- | ------------------------------------------------- |
+| **Bayesian regression**           | **Spend per user**                | **Significant increase** (+84 units)              |
+| **CausalImpact**                  | **Spend over time (time series)** | **Small negative estimate, but not significant**  |
+| **Survival Analysis (Cox model)** | **Churn / retention**             | **Small reduction in churn, but not significant** |

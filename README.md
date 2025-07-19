@@ -36,6 +36,11 @@ Survival analysis (e.g., user churn time) with survival or BayesSurv
 Day 4–5: Surrogate Model in Python
 Train a lightweight neural net or GP on R model outputs
 
+R causal model outputs  ──► Train Python surrogate model ──► Fast API predictions
+
+(offline, slow)                           (online, fast)
+
+
 Save model to S3
 
 Package prediction logic into an API (optional: Lambda or FastAPI)

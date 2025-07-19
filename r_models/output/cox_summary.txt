@@ -1,0 +1,16 @@
+Call:
+coxph(formula = surv_obj ~ received_campaign, data = df)
+
+  n= 1000, number of events= 1000 
+
+                      coef exp(coef) se(coef)      z Pr(>|z|)
+received_campaign -0.09099   0.91302  0.06358 -1.431    0.152
+
+                  exp(coef) exp(-coef) lower .95 upper .95
+received_campaign     0.913      1.095    0.8061     1.034
+
+Concordance= 0.505  (se = 0.009 )
+Likelihood ratio test= 2.05  on 1 df,   p=0.2
+Wald test            = 2.05  on 1 df,   p=0.2
+Score (logrank) test = 2.05  on 1 df,   p=0.2
+
