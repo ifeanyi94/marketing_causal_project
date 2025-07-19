@@ -1,0 +1,26 @@
+# Ignore R and Python environment files
+.Rhistory
+.RData
+.Rproj.user/
+renv/library/
+renv/python/
+.Renviron
+
+# Python related
+__pycache__/
+*.pyc
+*.pyo
+
+# Data
+*.csv
+*.rds
+
+# AWS / API keys (DO NOT COMMIT SECRETS)
+*.env
+aws_credentials/
+
+# Reports
+*.html
+
+# Other
+.DS_Store
