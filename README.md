@@ -1,113 +1,131 @@
 Title:
-“Causal Impact of Marketing Campaigns Using Bayesian Inference with Python, R, and AWS”
+“Causal Impact of Marketing Campaigns Using Bayesian Inference with Python ML models, R, and AWS”
 
-🔄 Python + R Division of Labor
-Task	Tool	Rationale
-Data simulation	Python	Flexible and integrates well with AWS SDKs
-Causal inference modeling	R (CausalImpact, brms, survival, BayesSurv)	Rich causal inference ecosystem
-Surrogate ML modeling	Python (scikit-learn, PyTorch)	ML pipeline, NN flexibility
-Data visualization / Reporting	R (ggplot2, Shiny, rmarkdown)	For stakeholder-friendly reporting
-Dashboard	Python (Streamlit) or R (Shiny)	Pick one: Streamlit for interactivity; Shiny for statistical display
-Deployment	AWS (S3, EC2, optional Lambda)	Handles storage, compute, hosting
+# 1. Project Overview
 
-📅 Day-by-Day Timeline (1–2 Weeks)
-Day 1: Project Setup
-Set up GitHub repo
+This project estimates the **causal impact of marketing campaigns** using an integrated **R + Python pipeline** deployed via **AWS**.
 
-Define R and Python virtual environments
+### Objectives:
 
-Create AWS S3 bucket
+- Determine the **true effect** of a marketing campaign on user spend and churn
+- Use a **Bayesian approach** to model uncertainty in uplift estimation
+- Provide a **real-time API** for targeting decisions using a surrogate Machine Learning model
 
-Simulate user + marketing data (Python)
-
-Save to S3
-
-Day 2–3: Modeling in R
-Load data from S3 using aws.s3 or boto3 + export to CSV
-
-Fit:
-
-Bayesian regression with brms
-
-Causal Impact analysis using Google’s CausalImpact
-
-Survival analysis (e.g., user churn time) with survival or BayesSurv
-
-Day 4–5: Surrogate Model in Python
-Train a lightweight neural net or GP on R model outputs
-
-R causal model outputs  ──► Train Python surrogate model ──► Fast API predictions
-
-(offline, slow)                           (online, fast)
+---
 
 
-Save model to S3
+# 2. Data Pipeline
 
-Package prediction logic into an API (optional: Lambda or FastAPI)
+## Data Generation
 
-Day 6: Visualization
-Option A: Python Dashboard (Streamlit)
-Interactive filters, counterfactual explorer
+- **Simulated Users Dataset:** `simulated_users.csv`  
+- Stored in **AWS S3** (`marketing-causal-data` bucket)
 
-Load R model results + Python predictions from S3
+### Data Features:
 
-Option B: R Dashboard (Shiny)
-Time-series and survival plots (ggplot2, plotly)
+| Feature | Description |
+|----------|-------------|
+| `user_id` | Unique customer ID |
+| `signup_date` | User registration date |
+| `spend` | User's cumulative spend |
+| `churn_days` | Time until churn (days) |
+| `received_campaign` | Treatment flag (1 = received campaign) |
 
-Explainability text from model summaries
+---
 
-Optional: deploy via EC2 or Shiny Server
 
-Day 7–8: Polish & Deliverables
-Add code comments, modularize (OOP in Python)
+# 3. Causal Modeling in R
 
-Commit all to GitHub
+## 3.1 Bayesian Regression (`brms`)
 
-Create a project report in RMarkdown (exported to HTML/PDF)
+A probabilistic regression model was fit using `brms` to estimate treatment effects with uncertainty.
 
-Deploy final dashboard (EC2 + Nginx or Shiny Server)
+> _Note: In this iteration, `brms_summary.csv` is optional and not displayed here._
 
-Optional: Create 2-minute Loom video walkthrough
+---
 
-📁 Updated Folder Structure
-csharp
-Copy
-Edit
-marketing_causal_project/
-│
-├── data_simulation/
-│   └── simulate_users.py
-│
-├── r_models/
-│   ├── causal_inference.R
-│   ├── survival_model.R
-│   ├── dependencies.R
-│   └── output/ (plots, model summaries)
-│
-├── python_models/
-│   ├── surrogate_model.py
-│   └── api_inference.py
-│
-├── dashboard/
-│   ├── streamlit_app.py  # Or shiny_app.R
-│
-├── reports/
-│   └── project_report.Rmd
-│
-├── aws/
-│   ├── s3_utils.py
-│   └── ec2_deploy_guide.md
-│
-├── README.md
-├── requirements.txt
-├── renv.lock  # for R reproducibility
-└── .gitignore
-🚀 Final Skills Showcased
-Domain	Skills
-Programming	Python + R integration, OOP, Git
-Statistics	Bayesian inference, causal modeling, survival analysis
-ML	Surrogate models, small NNs
-Data Viz	ggplot2, plotly, Streamlit/Shiny
-AWS	S3 for storage, EC2 for compute, optional Lambda
-Communication	RMarkdown report, dashboard, GitHub repo
-Business Acumen	Translating causal effects into marketing strategy
+## 3.2 Time Series Causal Impact (`CausalImpact`)
+
+Google’s `CausalImpact` package was used to analyze **pre- and post-campaign periods**.
+
+### Method:
+
+- **Pre-period:** First 50% of data (no campaign effect)
+- **Post-period:** Remaining 50% (campaign active)
+
+```r
+# Load Causal Impact Summary
+summary_txt <- readLines(here::here("r_models/output/causal_impact_summary.txt"))
+cat(summary_txt, sep = "\n")
+CausalImpact Plot:
+
+```r
+knitr::include_graphics("r_models/output/causal_impact_plot.pdf")
+
+
+4. Survival Analysis (User Churn)
+Analyzed churn behavior using Kaplan-Meier survival curves to estimate retention.
+
+Plot of Churn Survival by Group:
+```r
+knitr::include_graphics("r_models/output/survival_plot.pdf")
+
+Cox Proportional Hazards Model:
+```r
+# Load Cox model summary
+cox_summary <- readLines(here::here("r_models/output/cox_summary.txt"))
+cat(cox_summary, sep = "\n")
+
+
+5. Surrogate ML Model (Python)
+A PyTorch Neural Network (SimpleNN) was trained to mimic the Bayesian uplift predictions for real-time inference.
+
+API Integration:
+Deployed via FastAPI
+
+Input: user_id, past spend
+
+Output: Predicted future spend (treated vs control) + uplift
+
+Example Output:
+User ID	Past Spend	Predicted Spend (Treated)	Predicted Spend (Control)	Uplift
+1	    100	        285.12	                    98.59	                    186.53
+
+6. Dashboard Deployment
+Architecture:
+pgsql
+
+[User Input] --> [Shiny Dashboard]  
+                  |  
+                  |--> /predict_uplift (FastAPI API) --> PyTorch Surrogate Model  
+                  |--> R plots & summaries (CausalImpact, Survival, etc.)  
+Hosting:
+Component	Technology
+Dashboard	R Shiny
+API	FastAPI (Python)
+Storage	AWS S3
+
+7. Key Findings
+The marketing campaign increased user spend significantly in the post-period.
+
+Surrogate model predictions provide real-time uplift estimates, enabling targeted campaign delivery.
+
+Survival analysis revealed that campaign recipients churned less frequently than the control group.
+
+8. Next Steps
+Containerize with Docker for scalable deployment
+
+Expand causal models to multiple campaigns or treatments
+
+Develop automated pipeline for real-time decisioning
+
+9. Appendix
+GitHub Repo: [Insert link]
+
+AWS Resources:
+
+S3 Bucket: marketing-causal-data
+
+EC2 Instance for Dashboard Hosting
+
+Loom Walkthrough: [Insert Loom link if created]
