@@ -3,7 +3,7 @@ import torch
 import joblib
 from fastapi import FastAPI
 from pydantic import BaseModel
-from .surrogate_model import SimpleNN
+from python_models.surrogate_model import SimpleNN
 import subprocess
 from fastapi.responses import FileResponse
 

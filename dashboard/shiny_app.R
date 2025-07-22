@@ -43,7 +43,7 @@ ui <- dashboardPage(
                 verbatimTextOutput("impact_summary")
             ),
             box(title = "User Churn Survival", width = 6, status = "success", solidHeader = TRUE,
-                 tags$img(src = "http://127.0.0.1:8000/survival_plot", width = "600px", height = "400px")
+                 tags$img(src = "http://54.242.206.194:8000/survival_plot", width = "600px", height = "400px")
             )
         ),
 
@@ -56,15 +56,14 @@ ui <- dashboardPage(
 )
 
 # Define server logic
-server <- function(input, output, session) {
+server <- function(input, output, session) { 
 
     # Predict uplift using a Python API call (FastAPI)
     observeEvent(input$predict_btn, {
         req(input$spend_input)
 
         # Prepare API request
-        url <- "http://127.0.0.1:8000/predict_uplift"
-
+        url <- "http://54.242.206.194:8000/predict_uplift"
         payload <- list(
             user_id = 1,
             spend = input$spend_input
@@ -99,7 +98,7 @@ server <- function(input, output, session) {
     })
 
             output$impact_summary <- renderPrint({
-            res <- httr::GET("http://127.0.0.1:8000/causal_impact_summary")
+            res <- httr::GET("http://54.242.206.194:8000/causal_impact_summary")
             if (res$status_code == 200) {
                 content <- httr::content(res, as = "text")
                 cat(content)
@@ -109,7 +108,7 @@ server <- function(input, output, session) {
         })
 
             output$survival_plot <- renderImage({
-                list(src = "http://127.0.0.1:8000/survival_plot", contentType = "image/png", width = 600, height = 400)
+                list(src = "http://54.242.206.194:8000/survival_plot", contentType = "image/png", width = 600, height = 400)
             }, deleteFile = FALSE)
 
 
